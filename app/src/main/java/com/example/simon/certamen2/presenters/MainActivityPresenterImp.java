@@ -20,14 +20,21 @@ public class MainActivityPresenterImp implements MainActivityPresenter, OnMainAc
     }
 
     @Override
-    public void enviarUserName(String username){
-        //interactor.enviaDatos();
+    public void validarUserName(String username){
+        interactor.validarDatos(username,this);
     }
 
     @Override
-    public void exitToOperacion() {
+    public void exitoOperacion() {
        if(view != null) {
            view.navigateTo();
        }
+    }
+
+    @Override
+    public void usernameError() {
+        if (view != null){
+            view.setErrorUsername();
+        }
     }
 }

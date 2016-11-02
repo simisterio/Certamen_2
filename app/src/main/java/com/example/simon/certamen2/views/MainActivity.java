@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         btnBuscar = (Button) findViewById(R.id.btnBuscar);
 
         presenter = new MainActivityPresenterImp(this);
-        btnBuscar.setOnClickListener(
+        /*btnBuscar.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -43,15 +43,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
                         startActivity(intent);
                     }
                 }
-        );
+        );*/
     }
 
     @Override
     public void navigateTo() {
         Intent intent = new Intent(MainActivity.this, RepoActivity.class);
+        Bundle b = new Bundle();
+        b.putString("USER", userName.getText().toString());
+        intent.putExtras(b);
         startActivity(intent);
     }
-    public void enviar(View v){
-        presenter.enviarUserName(userName.getText().toString());
+
+    @Override
+    public void setErrorUsername() {
+        userName.setError("Campo obligatorio");
+    }
+
+    public void validar(View v){
+        presenter.validarUserName(userName.getText().toString());
     }
 }

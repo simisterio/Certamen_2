@@ -5,5 +5,6 @@ package com.example.simon.certamen2.interfaces;
  */
 
 public interface OnMainActivityFinishListener {
-    void exitToOperacion();
+    void exitoOperacion();
+    void usernameError();
 }

@@ -6,6 +6,5 @@ package com.example.simon.certamen2.interfaces;
 
 public interface MainActivityPresenter {
     //metodos q se ocuparan en view
-    void enviarUserName(String username);
-
+    void validarUserName(String username);
 }

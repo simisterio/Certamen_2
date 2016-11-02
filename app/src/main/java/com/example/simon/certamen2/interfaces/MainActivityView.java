@@ -7,4 +7,5 @@ package com.example.simon.certamen2.interfaces;
 public interface MainActivityView {
 
     void navigateTo();
+    void setErrorUsername();
 }

@@ -10,7 +10,12 @@ import com.example.simon.certamen2.interfaces.OnMainActivityFinishListener;
 public class MainActivityInteractorImp implements MainActivityInteractor {
 
     @Override
-    public void enviaDatos(String username, OnMainActivityFinishListener listener) {
-
+    public void validarDatos(String username, OnMainActivityFinishListener listener) {
+        if(!username.equals("")){
+            listener.exitoOperacion();
+        }
+        else{
+            listener.usernameError();
+        }
     }
 }
