@@ -1,4 +1,4 @@
-package com.example.simon.certamen2;
+package com.example.simon.certamen2.views;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,10 +7,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.simon.certamen2.R;
+import com.example.simon.certamen2.interfaces.MainActivityPresenter;
+import com.example.simon.certamen2.interfaces.MainActivityView;
+import com.example.simon.certamen2.presenters.MainActivityPresenterImp;
+
+public class MainActivity extends AppCompatActivity implements MainActivityView{
     private EditText userName;
     private Button btnBuscar;
-
+    private MainActivityPresenter presenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         userName = (EditText) findViewById(R.id.txtUsername);
         btnBuscar = (Button) findViewById(R.id.btnBuscar);
 
+        presenter = new MainActivityPresenterImp(this);
         btnBuscar.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -38,5 +44,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    @Override
+    public void navigateTo() {
+        Intent intent = new Intent(MainActivity.this, RepoActivity.class);
+        startActivity(intent);
+    }
+    public void enviar(View v){
+        presenter.enviarUserName(userName.getText().toString());
     }
 }
