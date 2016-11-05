@@ -1,10 +1,15 @@
-package com.example.simon.certamen2;
+package com.example.simon.certamen2.Adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.simon.certamen2.R;
+import com.example.simon.certamen2.models.User;
+
+import java.util.ArrayList;
 import java.util.List;
 /**
  * Created by simon on 30-09-2016.
@@ -12,11 +17,19 @@ import java.util.List;
 
 public class RepoAdaptador extends RecyclerView.Adapter<RepoAdaptador.ViewHolder> {
 
-    private List<User> dataSet;
+    private List<User> dataSet = new ArrayList<User>();
+
+    public void setDataSet(List<User> dataSet) {
+        this.dataSet = dataSet;
+        notifyDataSetChanged();
+    }
+
+    public RepoAdaptador(){}
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cellview,parent,false);
+
         return new ViewHolder(v);
     }
 
@@ -44,10 +57,6 @@ public class RepoAdaptador extends RecyclerView.Adapter<RepoAdaptador.ViewHolder
             descripView = (TextView) v.findViewById(R.id.textDescrip);
             updatedView = (TextView)v.findViewById(R.id.textUpdated);
         }
-
     }
-
-   public RepoAdaptador(List<User> dataSet){this.dataSet = dataSet;}
-
 
 }

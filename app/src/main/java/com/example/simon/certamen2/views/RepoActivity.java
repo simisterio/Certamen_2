@@ -1,6 +1,5 @@
 package com.example.simon.certamen2.views;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,8 +10,15 @@ import android.view.View;
 
 import com.example.simon.certamen2.HttpServerConnection;
 import com.example.simon.certamen2.R;
-import com.example.simon.certamen2.RepoAdaptador;
-import com.example.simon.certamen2.User;
+import com.example.simon.certamen2.Adapter.RepoAdaptador;
+import com.example.simon.certamen2.interfaces.RepoPresenter;
+import com.example.simon.certamen2.interfaces.RepoView;
+import com.example.simon.certamen2.models.User;
+import com.example.simon.certamen2.presenters.RepoPresenterImpl;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,13 +31,15 @@ import java.util.List;
  * Created by simon on 30-09-2016.
  */
 
-public class RepoActivity extends AppCompatActivity {
+public class RepoActivity extends AppCompatActivity implements RepoView {
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adaptador;
+    private RepoAdaptador adaptador;
     private RecyclerView.LayoutManager layoutManager;
+    private RepoPresenter repoPresenter;
+    private String resultado;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.repo_activity);
 
@@ -40,9 +48,10 @@ public class RepoActivity extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+        repoPresenter = new RepoPresenterImpl(this);
 
         Bundle bundle = this.getIntent().getExtras();
-        final String url =  "https://api.github.com/users/" + bundle.getString("USER") + "/repos";
+        final String url = "https://api.github.com/users/" + bundle.getString("USER") + "/repos";
 
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
             @Override
@@ -53,47 +62,31 @@ public class RepoActivity extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... params) {
                 //DESCOMENTAR URL Y BORRAR EL STRING
-                String resultado = new HttpServerConnection().connectToServer("http://www.mocky.io/v2/57eee3822600009324111202"/*url*/, 15000);
+                resultado = new HttpServerConnection().connectToServer("http://www.mocky.io/v2/57eee3822600009324111202"/*url*/, 15000);
                 return resultado;
             }
 
             @Override
-            protected void onPostExecute(final String result) {
-                if (result != null) {
-                    System.out.println(result);
+            protected void onPostExecute(final String resultado) {
+                if (resultado != null) {
+                    System.out.println(resultado);
 
                     // specify an adapter (see also next example)
-                    adaptador = new RepoAdaptador(getLista(result));
+                    adaptador = new RepoAdaptador();
+                    repoPresenter.loadListUser();
                     recyclerView.setAdapter(adaptador);
-
                 }
             }
         };
         task.execute();
     }
 
-    private List<User> getLista(String result){
-        List<User> listaRepo = new ArrayList<User>();
-        try {
-            JSONArray lista = new JSONArray(result);
+    @Override
+    public void initRecycler(List<User> user) {
+        adaptador.setDataSet(user);
+    }
 
-            int size = lista.length();
-            for(int i = 0; i < size; i++){
-                User repo = new User();
-                JSONObject objeto = lista.getJSONObject(i);
-
-                repo.setName(objeto.getString("name"));
-                repo.setDescription(objeto.getString("description"));
-                repo.setUpdated_at(objeto.getString("updated_at"));
-                repo.setHtmlUrl(objeto.getString("html_url"));
-
-                listaRepo.add(repo);
-            }
-            return listaRepo;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return listaRepo;
-        }
-
+    public void setString(View v) {
+        repoPresenter.stringServer(resultado);
     }
 }
