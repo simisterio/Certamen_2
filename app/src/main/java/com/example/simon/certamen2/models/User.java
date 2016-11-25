@@ -1,4 +1,6 @@
-package com.example.simon.certamen2;
+package com.example.simon.certamen2.models;
+
+import java.util.List;
 
 /**
  * Created by simon on 30-09-2016.

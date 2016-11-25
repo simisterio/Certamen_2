@@ -1,10 +1,18 @@
-package com.example.simon.certamen2;
+package com.example.simon.certamen2.Adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.simon.certamen2.R;
+import com.example.simon.certamen2.models.User;
+
+import java.util.ArrayList;
 import java.util.List;
 /**
  * Created by simon on 30-09-2016.
@@ -12,18 +20,37 @@ import java.util.List;
 
 public class RepoAdaptador extends RecyclerView.Adapter<RepoAdaptador.ViewHolder> {
 
-    private List<User> dataSet;
+    private List<User> dataSet = new ArrayList<User>();
+    private Context mContext;
+
+    public void setDataSet(Context mContext, List<User> dataSet) {
+        this.mContext = mContext;
+        this.dataSet = dataSet;
+        notifyDataSetChanged();
+    }
+
+    public RepoAdaptador(){}
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cellview,parent,false);
+
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        User user = dataSet.get(position);
+        final User user = dataSet.get(position);
         holder.tituloView.setText(user.getName());
+        holder.tituloView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.setData(Uri.parse(user.getHtmlUrl()));
+                mContext.startActivity(i);
+            }
+        });
         holder.descripView.setText(user.getDescription());
         holder.updatedView.setText(user.getUpdated_at());
     }
@@ -44,10 +71,6 @@ public class RepoAdaptador extends RecyclerView.Adapter<RepoAdaptador.ViewHolder
             descripView = (TextView) v.findViewById(R.id.textDescrip);
             updatedView = (TextView)v.findViewById(R.id.textUpdated);
         }
-
     }
-
-   public RepoAdaptador(List<User> dataSet){this.dataSet = dataSet;}
-
 
 }
