@@ -71,6 +71,8 @@ public class RepoActivity extends AppCompatActivity implements RepoView {
                 if (resultado != null) {
                     System.out.println(resultado);
 
+                    setString(resultado);
+
                     // specify an adapter (see also next example)
                     adaptador = new RepoAdaptador();
                     repoPresenter.loadListUser();
@@ -83,10 +85,10 @@ public class RepoActivity extends AppCompatActivity implements RepoView {
 
     @Override
     public void initRecycler(List<User> user) {
-        adaptador.setDataSet(user);
+        adaptador.setDataSet(getApplicationContext(), user);
     }
 
-    public void setString(View v) {
+    public void setString(String resultado) {
         repoPresenter.stringServer(resultado);
     }
 }

@@ -38,19 +38,21 @@ public class RepoInteractorImpl implements RepoInteractor {
     private List<User> getLista(String result) {
         List<User> listaRepo = new ArrayList<User>();
         try {
-            JSONArray lista = new JSONArray(result);
+            if(result != null) {
+                JSONArray lista = new JSONArray(result);
 
-            int size = lista.length();
-            for (int i = 0; i < size; i++) {
-                User repo = new User();
-                JSONObject objeto = lista.getJSONObject(i);
+                int size = lista.length();
+                for (int i = 0; i < size; i++) {
+                    User repo = new User();
+                    JSONObject objeto = lista.getJSONObject(i);
 
-                repo.setName(objeto.getString("name"));
-                repo.setDescription(objeto.getString("description"));
-                repo.setUpdated_at(objeto.getString("updated_at"));
-                repo.setHtmlUrl(objeto.getString("html_url"));
+                    repo.setName(objeto.getString("name"));
+                    repo.setDescription(objeto.getString("description"));
+                    repo.setUpdated_at(objeto.getString("updated_at"));
+                    repo.setHtmlUrl(objeto.getString("html_url"));
 
-                listaRepo.add(repo);
+                    listaRepo.add(repo);
+                }
             }
             return listaRepo;
         } catch (JSONException e) {

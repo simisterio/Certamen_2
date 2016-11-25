@@ -1,5 +1,8 @@
 package com.example.simon.certamen2.Adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +21,10 @@ import java.util.List;
 public class RepoAdaptador extends RecyclerView.Adapter<RepoAdaptador.ViewHolder> {
 
     private List<User> dataSet = new ArrayList<User>();
+    private Context mContext;
 
-    public void setDataSet(List<User> dataSet) {
+    public void setDataSet(Context mContext, List<User> dataSet) {
+        this.mContext = mContext;
         this.dataSet = dataSet;
         notifyDataSetChanged();
     }
@@ -35,8 +40,17 @@ public class RepoAdaptador extends RecyclerView.Adapter<RepoAdaptador.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        User user = dataSet.get(position);
+        final User user = dataSet.get(position);
         holder.tituloView.setText(user.getName());
+        holder.tituloView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.setData(Uri.parse(user.getHtmlUrl()));
+                mContext.startActivity(i);
+            }
+        });
         holder.descripView.setText(user.getDescription());
         holder.updatedView.setText(user.getUpdated_at());
     }
